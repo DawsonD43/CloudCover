@@ -1,0 +1,252 @@
+/**
+ * This program computes the cloud coverage over Lake Superior over a
+ * given time frame.
+ *
+ * Date Last Modified: 01 / 28 / 2018
+ *
+ * @author Dawson Dauphinais
+ *
+ * CS1121 Spring 2018
+*/
+
+import java.io.FileNotFoundException;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class LakeSuperiorCloudCover implements CloudCoverInterface {
+
+    private ArrayList<String> myArray = new ArrayList<>();
+
+    @Override
+    //Loads data into the program and places it into an ArrayList.
+    public void loadData(String filename) throws FileNotFoundException {
+        File file = new File(filename);
+        Scanner scan = new Scanner(file);
+        //loop that goes through the data and adds it to the myArray ArrayList
+        while (scan.hasNext()) {
+            myArray.add(scan.next());
+        }
+    }
+
+    @Override
+    //Takes the average of a given month over the years provided in the data.
+    public double getAverage(Month month) {
+        double cloudCover;
+        int count = 0; //keeps track of the terms added for the average calculation
+        double total = 0.0;//keeps track of the total cloud coverage
+        //loop that goes through the myArray ArrayList
+        for (int i = month.ordinal() + 1; i < myArray.size(); i += 13) {
+            total += Double.parseDouble(myArray.get(i));
+            count++;
+        }
+        if (total == 0) {
+            return -1;
+        } else {
+            return total / count;
+        }
+    }
+
+    @Override
+    //provides the average coverage over a given year.
+    public double getAverage(int year) {
+        double total = 0.0;//keeps track of the total cloud coverage
+        int count = 0;//keeps track of the terms added for the average calculation
+        String string = Integer.toString(year);
+        //loop that goes through the myArray ArrayList
+        for (int j = myArray.indexOf(string) + 1; j < myArray.indexOf(string) + 13; j++) {
+            total += Double.parseDouble(myArray.get(j));
+            count++;
+        }
+        if (total == 0.0) {
+            return -1;
+        } else {
+            return total / count;
+        }
+    }
+
+    @Override
+    //Provides the average cloud coverage over all of the years provided.
+    public double getAverage() {
+        double total = 0.0;//keeps track of the total cloud coverage
+        int count = 0;//keeps track of the terms added for the average calculation
+        //loop that goes through the myArray ArrayList
+        for (int i = 0; i < myArray.size(); i++) {
+            //separates the years from the cloud coverage values
+            if (myArray.get(i).contains(".")) {
+                total += Double.parseDouble(myArray.get(i));
+                count++;
+            }
+        }
+        if (total == 0.0) {
+            return -1;
+        } else {
+            return total / count;
+        }
+    }
+
+    @Override
+    //Provides the maximum cloud coverage for a given month.
+    public double getMax(Month month) {
+        double maximum = 0.0; //double that will keep track of the maximum value
+        // goes through the myArray ArrayList
+        for (int i = month.ordinal() + 1; i < myArray.size(); i += 13) {
+            // checks to see if the double in the ArrayList is larger than the maximum value
+            if (Double.parseDouble(myArray.get(i)) > maximum) {
+                maximum = Double.parseDouble(myArray.get(i));
+            }
+        }
+        if (maximum == 0.0) {
+            return -1;
+        } else {
+            return maximum;
+        }
+    }
+
+    @Override
+    //Provides the max cloud coverage for a given year.
+    public double getMax(int year) {
+        double maximum = 0.0;//keeps track of the maximum value
+        String string = Integer.toString(year);
+        //loop that goes through the myArray ArrayList
+        for (int j = myArray.indexOf(string) + 1; j < myArray.indexOf(string) + 13; j++) {
+            //checks to see if the double in the myArray ArrayList is larger than the max
+            if (Double.parseDouble(myArray.get(j)) > maximum) {
+                maximum = Double.parseDouble(myArray.get(j));
+            }
+        }
+        if (maximum == 0.0) {
+            return -1;
+        } else {
+            return maximum;
+        }
+    }
+
+    @Override
+    //Provides the max cloud coverage over the whole set of data.
+    public double getMax() {
+        double maximum = 0.0;//double that will keep track of the maximum value
+        //loop that goes through the myArray ArrayList
+        for (int i = 0; i < myArray.size(); i++)
+            //separates the years from the cloud coverage values
+            if (myArray.get(i).contains(".")) {
+                //checks if the double in the myArray ArrayList is larger than the maximum
+                if (Double.parseDouble(myArray.get(i)) > maximum) {
+                    maximum = Double.parseDouble(myArray.get(i));
+                }
+            }
+        if (maximum == 0.0) {
+            return -1;
+        } else {
+            return maximum;
+        }
+    }
+
+    @Override
+    //provides the minumum coverage for a given month.
+    public double getMin(Month month) {
+        double minimum = 100.0;//variable which will keep track of the minimum cloud coverage
+        //loop that goes through the myArray ArrayList
+        for (int i = month.ordinal() + 1; i < myArray.size(); i += 13) {
+            //checks to see if the value in the myArray ArrayList is less than the minimum
+            if (Double.parseDouble(myArray.get(i)) < minimum) {
+                minimum = Double.parseDouble(myArray.get(i));
+            }
+        }
+        if (minimum == 0.0) {
+            return -1;
+        } else {
+            return minimum;
+        }
+    }
+
+    @Override
+    //Provides the minimum coverage for a given year.
+    public double getMin(int year) {
+        double minimum = 100.0;//keeps track of the minimum cloud coverage
+        String string = Integer.toString(year);
+        //loop that goes through the myArray ArrayList
+        for (int j = myArray.indexOf(string) + 1; j < myArray.indexOf(string) + 13; j++) {
+            //checks to see if the value in the myArray ArrayList is less than the minimum value
+            if (Double.parseDouble(myArray.get(j)) < minimum) {
+                minimum = Double.parseDouble(myArray.get(j));
+            }
+        }
+        if (minimum == 0.0) {
+            return -1;
+        } else {
+            return minimum;
+        }
+    }
+
+    @Override
+    //Provides the minimum coverage of the set of data
+    public double getMin() {
+        double minimum = 100.00;//keeps track of the minimum cloud coverage
+        //loop that goes through the myArray ArrayList
+        for (int i = 0; i < myArray.size(); i++)
+            //separates the years from the cloud coverage values
+            if (myArray.get(i).contains(".")) {
+                //checks to see if the value in the myArray ArrayList is less than the minimum
+                if (Double.parseDouble(myArray.get(i)) < minimum) {
+                    minimum = Double.parseDouble(myArray.get(i));
+                }
+            }
+        if (minimum == 100.00) {
+            return -1;
+        } else {
+            return minimum;
+        }
+    }
+
+    @Override
+    //Provides the surface area covered in km^2
+    public double coverageToArea(double coverage) {
+        double surface_Area = 81925.0; // surface area of lake superior
+        coverage = (coverage / 100) * surface_Area; // calculation to determine the km^2 of coverage
+        return coverage;
+    }
+
+    @Override
+    //Provides the beginning year of the data
+    public int beginYear() {
+        int begin = 5000;//tracks the starting year
+        //loop that goes through the myArray ArrayList
+        for (int i = 0; i < myArray.size(); i++) {
+            //separates the years from the cloud coverage values
+            if (!myArray.get(i).contains(".")) {
+                //checks the value to see if it is less than the starting year
+                if (Integer.parseInt(myArray.get(i)) < begin) {
+                    begin = Integer.parseInt(myArray.get(i));
+                }
+            }
+        }
+        if (begin == 5000) {
+            return -1;
+        } else {
+            return begin;
+        }
+    }
+
+    @Override
+    //provides the final year of the data
+    public int endYear() {
+        int end = 0; //initializes a variable to keep track of the ending year
+        //goes through the myArray ArrayList
+        for (int i = 0; i < myArray.size(); i++) {
+            //separates the years from the cloud coverage values
+            if (!myArray.get(i).contains(".")) {
+                //checks the value to see if it is greater than the end year
+                if (Integer.parseInt(myArray.get(i)) > end) {
+                    end = Integer.parseInt(myArray.get(i));
+                }
+            }
+        }
+        if (end == 0) {
+            return -1;
+        } else {
+            return end;
+        }
+    }
+}
+
